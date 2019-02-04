@@ -1,7 +1,7 @@
 # Delivery
 A website for Delivering Pizza
 
-At a glance, once the application is setup, a basic land page should appear
+**At a glance, once the application is setup, a basic land page should appear
 
 ## Setting up
 
