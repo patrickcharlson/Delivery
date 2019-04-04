@@ -63,13 +63,13 @@
                 {{ message }}
             </div>
         {% endfor %}
-    {% for message in get_flashed_messages(category_filter=['form-success']) %}
+        {% for message in get_flashed_messages(category_filter=['form-success']) %}
             <div class="alert alert-success">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
                 {{ message }}
             </div>
         {% endfor %}
-    {% for message in get_flashed_messages(category_filter=['form-warning']) %}
+        {% for message in get_flashed_messages(category_filter=['form-warning']) %}
             <div class="alert alert-warning">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
                 {{ message }}

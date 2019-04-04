@@ -1,10 +1,10 @@
 from flask import flash, redirect, url_for, render_template
 from flask_login import login_user, login_required, logout_user, current_user
 
-from ..email import send_email
 from . import auth
 from .forms import RegistrationForm, LoginForm, ChangePasswordForm, RequestResetPasswordForm, \
     PasswordResetForm, ChangeEmailForm
+from ..email import send_email
 from ..models import Customer, db
 
 
