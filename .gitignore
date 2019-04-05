@@ -1,9 +1,14 @@
-# Created by .ignore support plugin (hsz.mobi)
-.gitignore
-.idea/
-venv/
+
+.idea/dataSources.local.xml
+.idea/dataSources.xml
+.idea/dataSources/
+.idea/inspectionProfiles/
+.idea/workspace.xml
 __pycache__/
 app/__pycache__/
 app/auth/__pycache__/
 app/main/__pycache__/
 data-dev.sqlite
+venv/
+config.env
+.gitignore

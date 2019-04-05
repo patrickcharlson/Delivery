@@ -13,9 +13,10 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         # noinspection PyArgumentList
-        customer = Customer(email=form.email.data,
-                            username=form.username.data,
-                            password=form.password.data)
+        customer = Customer(
+            email=form.email.data,
+            username=form.username.data,
+            password=form.password.data)
         db.session.add(customer)
         db.session.commit()
         token = customer.generate_confirmation_token()
@@ -34,7 +35,8 @@ def login():
         customer = Customer.query.filter_by(email=form.email.data).first()
         if customer is not None and customer.verify_password(form.password.data):
             login_user(customer, form.remember_me.data)
-            flash("You are now logged in", 'form-success')
+            if customer.confirmed:
+                flash("You are now logged in", 'form-success')
             return redirect(url_for('main.welcome_page'))
         else:
             flash('Invalid username or password', 'form-error')
@@ -144,10 +146,11 @@ def confirm(token):
 
 @auth.before_app_request
 def before_request():
-    if current_user.is_authenticated \
-            and not current_user.confirmed \
-            and request.endpoint[:5] != 'auth':
-        return redirect(url_for('auth.unconfirmed'))
+    if current_user.is_authenticated:
+        current_user.ping()
+        if not current_user.confirmed \
+                and request.endpoint[:5] != 'auth.':
+            return redirect(url_for('auth.unconfirmed'))
 
 
 @auth.route('/unconfirmed')

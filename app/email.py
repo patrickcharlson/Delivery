@@ -10,4 +10,4 @@ def send_email(recipient, subject, template, **kwargs):
                   sender=app.config['EMAIL_SENDER'], recipients=[recipient])
     msg.body = render_template(template + '.txt', **kwargs)
     msg.html = render_template(template + '.html', **kwargs)
-    mail.send()
+    mail.send(msg)

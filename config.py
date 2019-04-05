@@ -2,6 +2,13 @@ import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
+if os.path.exists('config.env'):
+    print('Importing environment from .env file')
+    for line in open('config.env'):
+        var = line.strip().split('=')
+        if len(var) == 2:
+            os.environ[var[0]] = var[1].replace("\"", "")
+
 
 class Config:
     APP_NAME = os.environ.get('APP_NAME') or 'Pizzeria'
@@ -35,7 +42,7 @@ class DevelopmentConfig(Config):
     DEBUG = True
 
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
-        'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
+                              'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
 
 
 class ProductionConfig(Config):

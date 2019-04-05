@@ -27,8 +27,7 @@ class RegistrationForm(FlaskForm):
         if Customer.query.filter_by(email=field.data).first():
             raise ValidationError('Email already registered')
 
-    @staticmethod
-    def validate_username(field):
+    def validate_username(self, field):
         if Customer.query.filter_by(username=field.data).first():
             raise ValidationError("username already in use!")
 
