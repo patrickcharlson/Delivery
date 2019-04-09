@@ -45,7 +45,7 @@ $ pip install -r requirements.txt
 
 ```
 $ source venv/bin/activate
-$ export FLASK_APP=app.py
+$ export FLASK_APP=manage.py
 $ export FLASK_ENV=development
 $ flask run
 
