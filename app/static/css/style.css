@@ -1,0 +1,10 @@
+.navbar-default {
+    position: fixed;
+    background-color: #ffffff;
+    padding: 10px;
+    margin: 0;
+}
+
+body {
+    padding-top: 100px;
+}
