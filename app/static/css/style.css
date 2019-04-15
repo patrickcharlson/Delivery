@@ -1,10 +1,138 @@
 .navbar-default {
-    position: fixed;
     background-color: #ffffff;
     padding: 10px;
+}
+
+html, body {
+    padding-top: 35px;
+    color: #4a4a4a;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.5;
+    height: 100%;
     margin: 0;
 }
 
-body {
-    padding-top: 100px;
+.wrapper {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    margin-bottom: -4em;
+}
+
+.sidebar-nav-fixed {
+    width: 24%;
+}
+
+a {
+    color: #000000;
+    cursor: pointer;
+    text-decoration: none
+}
+
+.alert-success {
+    color: #ffffff;
+    background-color: #20AC76;
+}
+
+.intro-header {
+    color: #ffffff;
+    text-align: center;
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(../img/pizza.jpg) no-repeat center center;
+    background-size: cover;
+    height: 100%;
+    padding-top: 50px;
+    padding-bottom: 50px;
+}
+
+.intro-message {
+    position: relative;
+    padding-top: 0;
+    padding-bottom: 40%;
+}
+
+.intro-message > h1 {
+    font-family: Roboto, serif;
+    font-size: 63px;
+    font-weight: bold;
+    letter-spacing: -.3px;
+}
+
+.intro-message > h3 {
+    font-family: Roboto, serif;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.intro-divider {
+    width: 600px;
+}
+
+/****************Footer*******************/
+
+footer {
+    padding: 50px 0 20px 0;
+    background-color: #EEEEEE;
+}
+
+#footer .push {
+    clear: both;
+    height: 4em;
+}
+
+.footer-nav li a {
+    border-left: 1px solid #ddd;
+    padding: 0 10px;
+    text-transform: uppercase;
+    color: #4e575d;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.copyright {
+    list-style: none;
+}
+
+.copyright li:first-child {
+    font-size: 12px;
+}
+
+.social-links li {
+    padding: 0 10px;
+}
+
+/***************************Login Form***********************************/
+
+.login-section {
+    padding: 50px 0;
+}
+
+.form-section {
+    margin: 20px auto;
+    width: 400px;
+    padding: 10px;
+}
+
+.form-section > h1 {
+    text-align: center;
+}
+
+.form-section > p > a {
+    color: #ea5b31;
+    text-decoration: none;
+}
+
+.navbar-btn {
+    margin-right: 20px;
+    background-color: #ea5b31;
+}
+.navbar-btn:hover {
+    color: #ea5b31;
+}
+.navbar-right > li > button > a {
+    text-decoration: none;
+    color: #ffffff;
+}
+.navbar-right > li > button > a:hover {
+    color: #ea5b31;
 }

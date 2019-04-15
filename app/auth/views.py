@@ -1,9 +1,8 @@
-from flask import flash, redirect, url_for, render_template, request
+from flask import flash, redirect, url_for, render_template
 from flask_login import login_user, login_required, logout_user, current_user
 
 from . import auth
-from .forms import RegistrationForm, LoginForm, ChangePasswordForm, RequestResetPasswordForm, \
-    PasswordResetForm, ChangeEmailForm
+from .forms import RegistrationForm, LoginForm, RequestResetPasswordForm, PasswordResetForm
 from ..email import send_email
 from ..models import Customer, db
 
@@ -15,7 +14,8 @@ def register():
         # noinspection PyArgumentList
         customer = Customer(
             email=form.email.data,
-            username=form.username.data,
+            first_name=form.first_name.data,
+            last_name=form.last_name.data,
             password=form.password.data)
         db.session.add(customer)
         db.session.commit()
@@ -35,8 +35,7 @@ def login():
         customer = Customer.query.filter_by(email=form.email.data).first()
         if customer is not None and customer.verify_password(form.password.data):
             login_user(customer, form.remember_me.data)
-            if customer.confirmed:
-                flash("You are now logged in", 'form-success')
+            flash("You are now logged in", 'form-success')
             return redirect(url_for('main.welcome_page'))
         else:
             flash('Invalid username or password', 'form-error')
@@ -49,22 +48,6 @@ def logout():
     logout_user()
     flash('You have been logged out', 'form-info')
     return redirect(url_for('main.index'))
-
-
-@auth.route('/change-password', methods=['GET', 'POST'])
-@login_required
-def change_password():
-    form = ChangePasswordForm()
-    if form.validate_on_submit():
-        if current_user.verify_password(form.old_password.data):
-            current_user.password = form.password.data
-            db.session.add(current_user)
-            db.session.commit()
-            flash("your password has been updated!", 'form-success')
-            return redirect(url_for('auth.login'))
-        else:
-            flash('Invalid password', 'form-error')
-    return render_template('auth/change_password.html', form=form)
 
 
 @auth.route('/reset', methods=['GET', 'POST'])
@@ -103,24 +86,6 @@ def password_reset(token):
     return render_template('auth/email/reset_password.html', form=form)
 
 
-@auth.route('/change-email', methods=['GET', 'POST'])
-@login_required
-def change_email_request():
-    form = ChangeEmailForm()
-    if form.validate_on_submit():
-        if current_user.verify_password(form.password.data):
-            new_email = form.email.data
-            token = current_user.generate_change_email_token(new_email)
-            send_email(new_email, 'Confirm your email address',
-                       'auth/email/change_email',
-                       customer=current_user, token=token)
-            flash('A confirmation link has been sent to {}'.format(new_email),
-                  'form-info')
-            return redirect(url_for('auth.login'))
-        flash('Invalid email address', 'form-error')
-    return render_template('auth/change_email.html', form=form)
-
-
 @auth.route('/change-email/<token>')
 @login_required
 def change_email(token):
@@ -144,28 +109,28 @@ def confirm(token):
     return redirect(url_for('main.index'))
 
 
-@auth.before_app_request
-def before_request():
-    if current_user.is_authenticated:
-        current_user.ping()
-        if not current_user.confirmed \
-                and request.endpoint[:5] != 'auth.':
-            return redirect(url_for('auth.unconfirmed'))
-
-
-@auth.route('/unconfirmed')
-def unconfirmed():
-    if current_user.is_anonymous or current_user.confirmed:
-        return redirect(url_for('main.index'))
-    return render_template('auth/unconfirmed.html')
-
-
-@auth.route('/confirm')
-@login_required
-def resend_confirmation():
-    token = current_user.generate_confirmation_token()
-    send_email(current_user.email, 'Confirm Your Account',
-               'auth/email/confirm', customer=current_user, token=token)
-    flash('A new confirmation email has been sent to {}'.format(current_user.email),
-          'form-info')
-    return redirect(url_for('main.welcome_page'))
+# @auth.before_app_request
+# def before_request():
+#     if current_user.is_authenticated:
+#         current_user.ping()
+#         if not current_user.confirmed \
+#                 and request.endpoint[:5] != 'auth.':
+#             return redirect(url_for('auth.unconfirmed'))
+#
+#
+# @auth.route('/unconfirmed')
+# def unconfirmed():
+#     if current_user.is_anonymous or current_user.confirmed:
+#         return redirect(url_for('main.index'))
+#     return render_template('auth/unconfirmed.html')
+#
+#
+# @auth.route('/confirm')
+# @login_required
+# def resend_confirmation():
+#     token = current_user.generate_confirmation_token()
+#     send_email(current_user.email, 'Confirm Your Account',
+#                'auth/email/confirm', customer=current_user, token=token)
+#     flash('A new confirmation email has been sent to {}'.format(current_user.email),
+#           'form-info')
+#     return redirect(url_for('main.welcome_page'))

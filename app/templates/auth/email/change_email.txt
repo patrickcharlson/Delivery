@@ -1,4 +1,4 @@
-Dear {{ customer.username }},
+Dear {{ customer.first_name }},
 
 To confirm your new email address, please click on the following link:
 
