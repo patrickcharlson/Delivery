@@ -1,8 +1,9 @@
 {% extends 'layouts/base.html' %}
+
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block body %}
-    <div class="login-form">
+    <div class="cart-items">
         <div class="container">
             <div class="dreamcrub">
                 <ul class="breadcrumbs">
@@ -11,27 +12,15 @@
                         <span>&gt;</span>
                     </li>
                     <li class="page">
-                        login
+                        Basket
                     </li>
                 </ul>
                 <ul class="previous">
-                    <li><a href="{{ url_for('pizzeria.products') }}">Browse all products</a></li>
+                    <li><a href="{{ url_for('pizzeria.products') }}">Back to Pizza Hub!</a></li>
                 </ul>
                 <div class="clearfix"></div>
             </div>
-
-
-            <h2>Login</h2>
-            <div class="login-grids">
-                <div class="log-form">
-                    <div class="log">
-                        <p>Welcome, please enter your credentials to continue</p>
-                        <p>If you haven't previously registered with us, <a href="{{ url_for('auth.register') }}">click
-                            here to create an account</a></p>
-                        {{ wtf.quick_form(form) }}
-                    </div>
-                </div>
-            </div>
+            <h2>My Shopping Basket</h2>
         </div>
     </div>
 

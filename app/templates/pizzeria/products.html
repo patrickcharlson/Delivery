@@ -1,0 +1,32 @@
+{% extends 'layouts/base.html' %}
+
+<title>{{ title }}</title>
+
+{% block body %}
+    <div class="container">
+        <div class="products-page">
+            <ul>
+                {% for img in images %}
+                    <li>
+                        <a href="">
+                            <div class="product-image">
+                                <div class="image_container">
+                                    <img src="{{ url_for('static', filename='uploads/' + img) }}" style="width: 220px;
+                                        height: 163px"
+                                         alt="">
+                                    <span class="delivery-time-range">30-40 min</span>
+                                </div>
+                                <div class="product_container">
+                                    <div class="name-left">
+                                        <p class="title"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <a class="basket_button" href="">Add to Basket</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

@@ -19,13 +19,5 @@ def shell_make_context():
 manager.add_command('shell', Shell(make_context=shell_make_context))
 manager.add_command('db', MigrateCommand)
 
-
-@manager.command
-def recreate_db():
-    db.drop_all()
-    db.create_all()
-    db.session.commit()
-
-
 if __name__ == '__main__':
     manager.run()

@@ -36,19 +36,11 @@ class Product(db.Model):
     __tablename__ = 'products'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
+    description = db.Column(db.Text)
     price = db.Column(db.Float(precision=2))
-    description = db.Column(db.String(64))
     image = db.Column(db.Text)
-    stock = db.Column(db.Integer)
-    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
+    quantity = db.Column(db.Integer)
     carts = db.relationship('Cart', backref=backref('product', uselist=False))
-
-
-class Category(db.Model):
-    __tablename__ = 'categories'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), unique=True)
-    products = db.relationship('Product', backref=backref('category', uselist=False))
 
 
 class Cart(db.Model):
@@ -90,14 +82,13 @@ class Customer(UserMixin, db.Model):
     first_name = db.Column(db.String(64), index=True)
     last_name = db.Column(db.String(64), index=True)
     username = db.Column(db.String(64), unique=True, index=True)
-    orders = db.relationship('Association', back_populates='customer', lazy='dynamic')
-    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     password_hash = db.Column(db.String(128))
     confirmed = db.Column(db.Boolean, default=False)
     phone_number = db.Column(db.String(64), unique=True)
     news_letter = db.Column(db.Boolean, default=False)
-    location = db.Column(db.String(64))
+    orders = db.relationship('Association', back_populates='customer', lazy='dynamic')
     carts = db.relationship('Cart', backref=backref('customer', uselist=False))
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 
     def __init__(self, **kwargs):
         super(Customer, self).__init__(**kwargs)

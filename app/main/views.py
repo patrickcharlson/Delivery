@@ -13,12 +13,6 @@ def index():
     return render_template('main/index.html')
 
 
-@main.route('/welcome_page')
-@login_required
-def welcome_page():
-    return render_template('main/welcome_page.html')
-
-
 @main.route('/customer/<first_name>')
 def customer(first_name):
     customer = Customer.query.filter_by(first_name=first_name).first_or_404()

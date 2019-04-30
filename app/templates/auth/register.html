@@ -1,13 +1,54 @@
-{% extends 'base.html' %}
+{% extends 'layouts/base.html' %}
 
 {% import 'bootstrap/wtf.html' as wtf %}
 
 {% block body %}
-    <div class="register-section">
+    <div class="registration-form">
         <div class="container">
-            <div class="form-section">
-                <h1>Register</h1>
-                {{ wtf.quick_form(form) }}
+            <div class="dreamcrub">
+                <ul class="breadcrumbs">
+                    <li class="home">
+                        <a href="/">Home</a>
+                        <span>&gt;</span>
+                    </li>
+                    <li class="page">
+                        Sign up
+                    </li>
+                </ul>
+                <ul class="previous">
+                    <li><a href="{{ url_for('pizzeria.products') }}">Browse all products</a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+
+
+            <h2>Sign Up</h2>
+            <div class="registration-grids">
+                <div class="reg-form">
+                    <div class="reg">
+                        <p>Welcome, please enter your credentials to continue</p>
+                        <p>If you have previously registered with us, <a href="{{ url_for('auth.login') }}">click
+                            here to log in</a></p>
+                        {{ wtf.quick_form(form) }}
+                        <p class="click">By clicking this button, you are agree to our <a href="#">Policy Terms and
+                            Conditions.</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="newsletter">
+        <div class="container">
+            <div class="join">
+                <div class="subscribe-container">
+                    <h1>Subscribe to our newsletters!</h1>
+                    <span>Don't miss out on our great offers & Receive deals from all our top vendors
+                        via e-mail</span>
+                    <div class="sub-form">
+                        {{ wtf.quick_form(s_form) }}
+                    </div>
+                </div>
             </div>
         </div>
     </div>

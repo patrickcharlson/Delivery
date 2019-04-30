@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, SubmitField, StringField, BooleanField
+from wtforms import PasswordField, SubmitField, StringField, BooleanField, SelectField
 from wtforms.validators import DataRequired, EqualTo, ValidationError, Email, Length
 
 from ..models import Customer
@@ -30,3 +30,9 @@ class EditProfileForm(FlaskForm):
     phone_number = StringField('Mobile')
     news_letter = BooleanField('Subscribe to NewsLetter')
     submit = SubmitField('SAVE CHANGES')
+
+
+class TownForm(FlaskForm):
+    towns = [('Nrb', 'Nairobi'), ('Eld', 'Eldoret'), ('ksm', 'Kisumu City'), ('naks', 'Nakuru'), ('msa', 'Mombasa')]
+    myCity = SelectField('Select your City', choices=towns,
+                         validators=[DataRequired()], render_kw={'placeholder': 'Select Your City'})
