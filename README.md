@@ -8,7 +8,7 @@ A website for Delivering Pizza
 ##### Clone the repo
 
 ```
-$ git clone https://github.com/patrickcharlson/Delivery.git
+$ git clone https://github.com/patrickcharlson/delivery.git
 $ cd Delivery
 ```
 
