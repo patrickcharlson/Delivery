@@ -40,7 +40,7 @@ class Product(db.Model):
     price = db.Column(db.Float(precision=2))
     image = db.Column(db.Text)
     quantity = db.Column(db.Integer)
-    carts = db.relationship('Cart', backref=backref('product', uselist=False))
+    carts = db.relationship('Cart', backref='product', lazy='dynamic')
 
 
 class Cart(db.Model):
