@@ -4,6 +4,7 @@ from flask import current_app
 from flask_login import UserMixin, AnonymousUserMixin
 from itsdangerous import BadSignature, SignatureExpired
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from sqlalchemy.orm import backref
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from . import db
@@ -29,6 +30,24 @@ class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
     customers = db.relationship('Association', back_populates='order', lazy='dynamic')
+
+
+class Product(db.Model):
+    __tablename__ = 'products'
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(64), unique=True)
+    description = db.Column(db.Text)
+    price = db.Column(db.Float(precision=2))
+    image = db.Column(db.Text)
+    quantity = db.Column(db.Integer)
+    carts = db.relationship('Cart', backref='product', lazy='dynamic')
+
+
+class Cart(db.Model):
+    __tablename__ = 'carts'
+    id = db.Column(db.Integer, primary_key=True)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customers.id'))
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
 
 
 class Role(db.Model):
@@ -63,14 +82,13 @@ class Customer(UserMixin, db.Model):
     first_name = db.Column(db.String(64), index=True)
     last_name = db.Column(db.String(64), index=True)
     username = db.Column(db.String(64), unique=True, index=True)
-    orders = db.relationship('Association', back_populates='customer', lazy='dynamic')
-    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
     password_hash = db.Column(db.String(128))
     confirmed = db.Column(db.Boolean, default=False)
-    location = db.Column(db.String(64))
-    about_me = db.Column(db.Text())
-    member_since = db.Column(db.DateTime(), default=datetime.utcnow)
-    last_seen = db.Column(db.DateTime(), default=datetime.utcnow)
+    phone_number = db.Column(db.String(64), unique=True)
+    news_letter = db.Column(db.Boolean, default=False)
+    orders = db.relationship('Association', back_populates='customer', lazy='dynamic')
+    carts = db.relationship('Cart', backref=backref('customer', uselist=False))
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 
     def __init__(self, **kwargs):
         super(Customer, self).__init__(**kwargs)

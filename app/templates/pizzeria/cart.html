@@ -1,0 +1,41 @@
+{% extends 'layouts/base.html' %}
+
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block body %}
+    <div class="cart-items">
+        <div class="container">
+            <div class="dreamcrub">
+                <ul class="breadcrumbs">
+                    <li class="home">
+                        <a href="/">Home</a>
+                        <span>&gt;</span>
+                    </li>
+                    <li class="page">
+                        Basket
+                    </li>
+                </ul>
+                <ul class="previous">
+                    <li><a href="{{ url_for('pizzeria.products') }}">Back to Pizza Hub!</a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+            <h2>My Shopping Basket</h2>
+        </div>
+    </div>
+
+    <div class="newsletter">
+        <div class="container">
+            <div class="join">
+                <div class="subscribe-container">
+                    <h1>Subscribe to our newsletters!</h1>
+                    <span>Don't miss out on our great offers & Receive deals from all our top vendors
+                        via e-mail</span>
+                    <div class="sub-form">
+                        {{ wtf.quick_form(s_form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

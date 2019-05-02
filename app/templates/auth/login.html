@@ -1,16 +1,52 @@
-{% extends 'base.html' %}
+{% extends 'layouts/base.html' %}
 {% import 'bootstrap/wtf.html' as wtf %}
 
-{% block page_content %}
-    <div class="page-header">
-        <h1>Login</h1>
+{% block body %}
+    <div class="login-form">
+        <div class="container">
+            <div class="dreamcrub">
+                <ul class="breadcrumbs">
+                    <li class="home">
+                        <a href="/">Home</a>
+                        <span>&gt;</span>
+                    </li>
+                    <li class="page">
+                        login
+                    </li>
+                </ul>
+                <ul class="previous">
+                    <li><a href="{{ url_for('pizzeria.products') }}">Browse all products</a></li>
+                </ul>
+                <div class="clearfix"></div>
+            </div>
+
+
+            <h2>Login</h2>
+            <div class="login-grids">
+                <div class="log-form">
+                    <div class="log">
+                        <p>Welcome, please enter your credentials to continue</p>
+                        <p>If you haven't previously registered with us, <a href="{{ url_for('auth.register') }}">click
+                            here to create an account</a></p>
+                        {{ wtf.quick_form(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="col-md-4">
-        {{ wtf.quick_form(form) }}
-        <br>
-    <p>
-        Forgot your password?
-        <a href="{{ url_for('auth.reset_password_request') }}"> Click to reset</a>
-    </p>
+
+    <div class="newsletter">
+        <div class="container">
+            <div class="join">
+                <div class="subscribe-container">
+                    <h1>Subscribe to our newsletters!</h1>
+                    <span>Don't miss out on our great offers & Receive deals from all our top vendors
+                        via e-mail</span>
+                    <div class="sub-form">
+                        {{ wtf.quick_form(s_form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

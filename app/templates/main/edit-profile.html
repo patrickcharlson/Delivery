@@ -1,0 +1,35 @@
+{% extends 'layouts/base.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+
+{% block body %}
+    <div class="edit-profile">
+        <div class="container">
+            <div class="list-nav">
+                <div class="nav-left">
+                    <div class="sidebar-nav-fixed affix">
+                        <ul class="nav">
+                            <li><h3>My Account</h3><br>
+                            <li><a href="{{ url_for('main.edit_profile') }}">
+                                <i class="fa fa-user"></i> Account Settings</a>
+                            </li>
+                            <li><a href=""><i class="fa fa-location-arrow"></i> Address Book</a></li>
+                            <li><a href="{{ url_for('main.change_email_request') }}">
+                                <i class="fa fa-envelope"></i> Change Email</a>
+                            </li>
+                            <li><a href="{{ url_for('main.change_password') }}">
+                                <i class="fa fa-key"></i> Change Password</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="edit-grids">
+            <div class="edit-form">
+                <div class="edit">
+                    <h3>Account Settings</h3><br>
+                    {{ wtf.quick_form(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
