@@ -1,5 +1,5 @@
-jsonschema
 alembic==1.0.8
+attrs==19.1.0
 BareNecessities==0.2.8
 blinker==1.4
 Click==7.0
@@ -13,11 +13,15 @@ Flask-Moment==0.7.0
 Flask-Script==2.0.6
 Flask-SQLAlchemy==2.3.2
 Flask-WTF==0.14.2
+gunicorn==19.9.0
 itsdangerous==1.1.0
 Jinja2==2.10
+jsonschema==3.0.1
 Mail==2.1.0
 Mako==1.0.8
 MarkupSafe==1.1.1
+psycopg2==2.8.2
+pyrsistent==0.15.1
 python-dateutil==2.8.0
 python-editor==1.0.4
 six==1.12.0
