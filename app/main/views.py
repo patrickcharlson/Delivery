@@ -5,18 +5,11 @@ from . import main
 from .forms import ChangePasswordForm, ChangeEmailForm, EditProfileForm
 from .. import db
 from ..email import send_email
-from ..models import Customer
 
 
 @main.route('/')
 def index():
     return render_template('main/index.html')
-
-
-@main.route('/customer/<first_name>')
-def customer(first_name):
-    customer = Customer.query.filter_by(first_name=first_name).first_or_404()
-    return render_template('customer.html', customer=customer)
 
 
 @main.route('/customer/change-password', methods=['GET', 'POST'])
@@ -62,6 +55,7 @@ def edit_profile():
         current_user.last_name = form.last_name.data
         current_user.phone_number = form.phone_number.data
         current_user.news_letter = form.news_letter.data
+        current_user.email = form.email.data
         db.session.add(current_user._get_current_object())
         db.session.commit()
         flash('Your Profile has been updated', 'form-success')
@@ -69,4 +63,5 @@ def edit_profile():
     form.last_name.data = current_user.last_name
     form.phone_number.data = current_user.phone_number
     form.news_letter.data = current_user.news_letter
+    form.email.data = current_user.email
     return render_template('main/edit-profile.html', form=form)

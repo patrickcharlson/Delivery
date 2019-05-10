@@ -105,10 +105,6 @@ class Customer(UserMixin, db.Model):
     def is_admin(self):
         return self.can(Permission.ADMINISTER)
 
-    def ping(self):
-        self.last_seen = datetime.utcnow()
-        db.session.add(self)
-
     @property
     def password(self):
         raise AttributeError("Password is not a readable attribute")

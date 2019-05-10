@@ -1,4 +1,4 @@
-from flask import flash, redirect, url_for, render_template
+from flask import flash, redirect, url_for, render_template, request
 from flask_login import login_user, login_required, logout_user, current_user
 
 from . import auth
@@ -37,10 +37,12 @@ def login():
         customer = Customer.query.filter_by(email=form.email.data).first()
         if customer is not None and customer.verify_password(form.password.data):
             login_user(customer)
+            next = request.args.get('next')
+            if next is None or not next.startswith('/'):
+                next = url_for('pizzeria.products')
             flash("You are now logged in", 'form-success')
-            return redirect(url_for('pizzeria.products'))
-        else:
-            flash('Invalid username or password', 'form-error')
+            return redirect(next)
+        flash('Invalid username or password', 'form-error')
     return render_template('auth/login.html', form=form, title='Login', s_form=s_form)
 
 
