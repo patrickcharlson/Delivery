@@ -8,8 +8,8 @@ from . import pizzeria
 
 @pizzeria.route('/products', methods=['GET', 'POST'])
 def products():
-    static_folder = os.path.abspath('/home/charlson/PycharmProjects/Pizzeria/app/static')
-    images = os.listdir(os.path.join(static_folder, 'uploads/'))
+    static_folder = os.path.abspath('/home/charlson/PycharmProjects/Pizzeria/app/static/uploads')
+    images = os.listdir(static_folder)
     return render_template('pizzeria/products.html', images=images, title='Pizza Hub')
 
 
