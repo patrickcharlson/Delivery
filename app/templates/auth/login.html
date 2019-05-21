@@ -1,8 +1,7 @@
-{% extends 'layouts/base.html' %}
+{% extends 'base.html' %}
 {% import 'bootstrap/wtf.html' as wtf %}
 
-{% block body %}
-    {% block content %}{% endblock %}
+{% block app_content %}
     <div class="login-form">
         <div class="container">
             <div class="dreamcrub">
@@ -16,7 +15,7 @@
                     </li>
                 </ul>
                 <ul class="previous">
-                    <li><a href="{{ url_for('pizzeria.products') }}">Browse all products</a></li>
+                    <li><a href="{{ url_for('main.products') }}">Browse all products</a></li>
                 </ul>
                 <div class="clearfix"></div>
             </div>

@@ -1,7 +1,7 @@
-{% extends 'layouts/base.html' %}
+{% extends 'base.html' %}
 {% import 'bootstrap/wtf.html' as wtf %}
 
-{% block body %}
+{% block app_content %}
     <div class="edit-profile">
         <div class="container">
             <div class="list-nav">
@@ -13,21 +13,21 @@
                                 <i class="fa fa-user"></i> Account Settings</a>
                             </li>
                             <li><a href=""><i class="fa fa-location-arrow"></i> Address Book</a></li>
-                            <li><a href="{{ url_for('main.change_email_request') }}">
+                            <li><a href="{{ url_for('auth.change_email_request') }}">
                                 <i class="fa fa-envelope"></i> Change Email</a>
                             </li>
-                            <li><a href="{{ url_for('main.change_password') }}">
+                            <li><a href="{{ url_for('auth.change_password') }}">
                                 <i class="fa fa-key"></i> Change Password</a></li>
                         </ul>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="edit-grids">
-            <div class="edit-form">
-                <div class="edit">
-                    <h3>Account Settings</h3><br>
-                    {{ wtf.quick_form(form) }}
+            <div class="edit-grids">
+                <div class="edit-form">
+                    <div class="edit">
+                        <h3>Account Settings</h3><br>
+                        {{ wtf.quick_form(form) }}
+                    </div>
                 </div>
             </div>
         </div>

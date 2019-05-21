@@ -39,7 +39,7 @@
                 <div class="header-right">
                     <div class="basket">
                         <ul>
-                            <li><a href="{{ url_for('pizzeria.cart') }}">
+                            <li><a href="{{ url_for('main.cart') }}">
                                 <span class="glyphicon glyphicon-shopping-cart"></span>Your basket</a>
                             </li>
                         </ul>
@@ -73,7 +73,7 @@
                        aria-expanded="false">Menu <span class="caret"></span></a>
                 </li>
                 <li class="products">
-                    <a href="{{ url_for('pizzeria.products') }}">Pizza Hub</a>
+                    <a href="{{ url_for('main.products') }}">Pizza Hub</a>
                 </li>
             </ul>
 
@@ -87,7 +87,7 @@
                             <li><a>{{ current_user.first_name }}</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="{{ url_for('main.edit_profile') }}">My Account</a></li>
-                            <li><a href="{{ url_for('main.change_email_request') }}">Change Email</a></li>
+                            <li><a href="{{ url_for('auth.change_email_request') }}">Change Email</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="{{ url_for('auth.logout') }}">logout</a></li>
                         </ul>
@@ -99,16 +99,41 @@
 </nav>
 
 <div class="wrapper">
-    {% block body %}
+    {% block content %}
+        <div class="container">
+            {% for message in get_flashed_messages(category_filter=['form-error']) %}
+                <div class="alert alert-danger">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    {{ message }}
+                </div>
+            {% endfor %}
+            {% for message in get_flashed_messages(category_filter=['form-info']) %}
+                <div class="alert alert-info">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    {{ message }}
+                </div>
+            {% endfor %}
+            {% for message in get_flashed_messages(category_filter=['form-success']) %}
+                <div class="alert alert-success">
+                    <b>
+                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    </b>
+                    {{ message }}
+                </div>
+            {% endfor %}
+            {% for message in get_flashed_messages(category_filter=['form-warning']) %}
+                <div class="alert alert-warning">
+                    <button type="button" class="close" data-dismiss="alert">&times;</button>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+
+
+        {% block app_content %}{% endblock %}
+
     {% endblock %}
     <div class="push" style="height: 4em"></div>
-</div>
-<div class="news-letter">
-    <div class="container">
-        <div class="join">
-            <h6>Join our mailing list</h6>
-        </div>
-    </div>
 </div>
 
 {#<footer id="footer">
@@ -137,38 +162,7 @@
         </ul>
     </div>
 </footer>
-{% block content %}
-    <div class="container">
-        {% for message in get_flashed_messages(category_filter=['form-error']) %}
-            <div class="alert alert-danger">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                {{ message }}
-            </div>
-        {% endfor %}
-        {% for message in get_flashed_messages(category_filter=['form-info']) %}
-            <div class="alert alert-info">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                {{ message }}
-            </div>
-        {% endfor %}
-        {% for message in get_flashed_messages(category_filter=['form-success']) %}
-            <div class="alert alert-success">
-                <b>
-                    <button type="button" class="close" data-dismiss="alert">&times;</button>
-                </b>
-                {{ message }}
-            </div>
-        {% endfor %}
-        {% for message in get_flashed_messages(category_filter=['form-warning']) %}
-            <div class="alert alert-warning">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                {{ message }}
-            </div>
-        {% endfor %}
 
-        {% block page_content %}{% endblock %}
-    </div>
-{% endblock %}
 
 #}{#{% block scripts %}
     {{ super() }}

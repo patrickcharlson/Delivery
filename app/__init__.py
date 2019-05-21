@@ -1,7 +1,3 @@
-import logging
-import os
-from logging.handlers import RotatingFileHandler
-
 from flask import Flask
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager
@@ -32,30 +28,13 @@ def create_app(config_name):
     mail.init_app(app)
     moment.init_app(app)
 
-    from .main import main as main_blueprint
-    app.register_blueprint(main_blueprint)
+    from .main import bp as main_bp
+    app.register_blueprint(main_bp)
 
-    from .auth import auth as auth_blueprint
-    app.register_blueprint(auth_blueprint, url_prefix='/auth')
+    from .auth import bp as auth_bp
+    app.register_blueprint(auth_bp, url_prefix='/auth')
 
-    from .pizzeria import pizzeria as pizzeria_blueprint
-    app.register_blueprint(pizzeria_blueprint)
-
-    # if app.config['LOG_TO_STDOUT']:
-    #     stream_handler = logging.StreamHandler()
-    #     stream_handler.setLevel(logging.INFO)
-    #     app.logger.addHandler(stream_handler)
-    # else:
-    #     if not os.path.exists('logs'):
-    #         os.mkdir('logs')
-    #     file_handler = RotatingFileHandler('logs/manage.log',
-    #                                        maxBytes=10240, backupCount=10)
-    #     file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s '
-    #                                                 '[in %(pathname)s:%(lineno)d]'))
-    #     file_handler.setLevel(logging.INFO)
-    #     app.logger.info(file_handler)
-    #
-    # app.logger.setLevel(logging.INFO)
-    # app.logger.info('Pizzeria Startup')
+    from .errors import bp as errors_bp
+    app.register_blueprint(errors_bp)
 
     return app

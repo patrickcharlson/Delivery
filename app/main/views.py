@@ -1,52 +1,20 @@
+import os
+
 from flask import render_template, flash, redirect, url_for
 from flask_login import login_required, current_user
 
-from . import main
-from .forms import ChangePasswordForm, ChangeEmailForm, EditProfileForm
+from app.auth.forms import SubscribeForm
+from . import bp
+from .forms import EditProfileForm
 from .. import db
-from ..email import send_email
 
 
-@main.route('/')
+@bp.route('/')
 def index():
-    return render_template('main/index.html')
+    return render_template('index.html')
 
 
-@main.route('/customer/change-password', methods=['GET', 'POST'])
-@login_required
-def change_password():
-    form = ChangePasswordForm()
-    if form.validate_on_submit():
-        if current_user.verify_password(form.old_password.data):
-            current_user.password = form.password.data
-            db.session.add(current_user)
-            db.session.commit()
-            flash("your password has been updated!", 'form-success')
-            return redirect(url_for('auth.login'))
-        else:
-            flash('Invalid password', 'form-error')
-    return render_template('main/change_password.html', form=form)
-
-
-@main.route('/customer/change-email', methods=['GET', 'POST'])
-@login_required
-def change_email_request():
-    form = ChangeEmailForm()
-    if form.validate_on_submit():
-        if current_user.verify_password(form.password.data):
-            new_email = form.email.data
-            token = current_user.generate_change_email_token(new_email)
-            send_email(new_email, 'Confirm your email address',
-                       'auth/email/change_email',
-                       customer=current_user, token=token)
-            flash('A confirmation link has been sent to {}'.format(new_email),
-                  'form-info')
-            return redirect(url_for('auth.login'))
-        flash('Invalid email address', 'form-error')
-    return render_template('main/change_email.html', form=form)
-
-
-@main.route('/edit-profile', methods=['GET', 'POST'])
+@bp.route('/edit-profile', methods=['GET', 'POST'])
 @login_required
 def edit_profile():
     form = EditProfileForm()
@@ -59,9 +27,23 @@ def edit_profile():
         db.session.add(current_user._get_current_object())
         db.session.commit()
         flash('Your Profile has been updated', 'form-success')
+        return redirect(url_for('main.edit_profile'))
     form.first_name.data = current_user.first_name
     form.last_name.data = current_user.last_name
     form.phone_number.data = current_user.phone_number
     form.news_letter.data = current_user.news_letter
     form.email.data = current_user.email
-    return render_template('main/edit-profile.html', form=form)
+    return render_template('edit-profile.html', form=form)
+
+
+@bp.route('/products', methods=['GET', 'POST'])
+def products():
+    static_folder = os.path.abspath('/home/charlson/PycharmProjects/Pizzeria/app/static/uploads')
+    images = os.listdir(static_folder)
+    return render_template('products.html', images=images, title='Pizza Hub')
+
+
+@bp.route('/cart')
+def cart():
+    s_form = SubscribeForm()
+    return render_template('cart.html', s_form=s_form)
