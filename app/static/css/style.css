@@ -47,7 +47,7 @@ a {
 .intro-header {
     color: #ffffff;
     text-align: center;
-    background: linear-gradient(rgba(0, 31, 31, 0.4), rgba(0, 0, 0, 0.5)), url(../img/pizza_king.jpg) no-repeat center center;
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url(../img/pizza_2.jpg) no-repeat center center;
     background-size: cover;
     height: 100%;
     padding-top: 50px;

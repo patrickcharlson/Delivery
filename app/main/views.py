@@ -4,6 +4,7 @@ from flask import render_template, flash, redirect, url_for
 from flask_login import login_required, current_user
 
 from app.auth.forms import SubscribeForm
+from app.models import CartItem, Customer, Product
 from . import bp
 from .forms import EditProfileForm
 from .. import db
@@ -47,3 +48,14 @@ def products():
 def cart():
     s_form = SubscribeForm()
     return render_template('cart.html', s_form=s_form)
+
+
+@bp.route('/add_to_cart')
+def add_to_cart():
+    product_id = Product.query.get(id)
+    customer = Customer.query.get_or_404(id)
+    cart_item = CartItem(product_id=product_id,
+                         customer_id=customer)
+    db.session.add(cart_item)
+    db.session.commit()
+    return redirect(url_for('.cart'))

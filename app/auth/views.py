@@ -57,7 +57,7 @@ def logout():
 
 @bp.route('/reset', methods=['GET', 'POST'])
 def reset_password_request():
-    if current_user.is_bpenticated:
+    if current_user.is_authenticated:
         return redirect(url_for('main.index'))
     form = RequestResetPasswordForm()
     if form.validate_on_submit():
@@ -75,7 +75,7 @@ def reset_password_request():
 
 @bp.route('/reset/<token>', methods=['GET', 'POST'])
 def password_reset(token):
-    if current_user.is_bpenticated:
+    if current_user.is_authenticated:
         return redirect(url_for('main.index'))
     form = PasswordResetForm()
     if form.validate_on_submit():

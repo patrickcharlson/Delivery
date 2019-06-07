@@ -1,35 +1,31 @@
-from datetime import datetime
-
 from flask import current_app
-from flask_login import UserMixin, AnonymousUserMixin
+from flask_login import UserMixin, AnonymousUserMixin, current_user
 from itsdangerous import BadSignature, SignatureExpired
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
-from sqlalchemy.orm import backref
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from . import db
 from . import login_manager
 
 
-class Permission:
-    GENERAL = 0x01
-    ADMINISTER = 0xff
-
-
-class Association(db.Model):
-    __tablename__ = 'association'
-    order_id = db.Column(db.Integer, db.ForeignKey('orders.id'), primary_key=True)
+class CartItem(db.Model):
+    __tablename__ = 'cartItems'
     customer_id = db.Column(db.Integer, db.ForeignKey('customers.id'), primary_key=True)
-    extra_data = db.Column(db.String(50))
-    customer = db.relationship('Customer', back_populates='orders')
-    order = db.relationship('Order', back_populates='customers')
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'), primary_key=True)
+    quantity = db.Column(db.Integer)
+    product = db.relationship('product')
 
+    @staticmethod
+    def get_total_price(cart_items=None):
+        if cart_items is None:
+            cart_items = current_user.cart_items
+        prices = [item.product.price * item.quantity for item in cart_items]
+        return sum(prices)
 
-class Order(db.Model):
-    __tablename__ = 'orders'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), unique=True)
-    customers = db.relationship('Association', back_populates='order', lazy='dynamic')
+    @staticmethod
+    def delete_cart_items(cart_items):
+        for item in cart_items:
+            db.session.delete(item)
 
 
 class Product(db.Model):
@@ -37,42 +33,44 @@ class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
     description = db.Column(db.Text)
-    price = db.Column(db.Float(precision=2))
-    image = db.Column(db.Text)
-    quantity = db.Column(db.Integer)
-    carts = db.relationship('Cart', backref='product', lazy='dynamic')
+    price = db.Column(db.Float)
+    quantity = db.Column(db.String(1000))
+    unit = db.Column(db.String(1000))
+    updated = db.Column(db.Integer, default=0)
+    available = db.Column(db.Boolean, default=True)
+    cart_items = db.relationship('CartItem', backref='products', lazy='dynamic')
 
+    def __init__(self, name, unit, price, available, product_id, description="", quantity=0):
+        self.name = name
+        self.price = price
+        self.unit = unit
+        self.description = description
+        self.product_id = product_id
+        self.quantity = quantity
+        self.available = available
 
-class Cart(db.Model):
-    __tablename__ = 'carts'
-    id = db.Column(db.Integer, primary_key=True)
-    customer_id = db.Column(db.Integer, db.ForeignKey('customers.id'))
-    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
+    def remove_from_carts(self):
+        cart_items = CartItem.query.filter_by(product_id=self.id).all()
+        for item in cart_items:
+            db.session.delete(item)
+        db.session.commit()
 
+    def get_quantity_in_cart(self):
+        cart_item = CartItem.query.filter_by(customer_id=current_user.id, product_id=self.id).first()
+        if cart_item:
+            return cart_item.quantity
+        else:
+            return 0
 
-class Role(db.Model):
-    __tablename__ = 'roles'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), unique=True)
-    default = db.Column(db.Boolean, default=False, index=True)
-    permissions = db.Column(db.Integer)
-    customers = db.relationship('Customer', backref='role', lazy='dynamic')
+    def disable_product(self):
+        self.available = False
+        self.remove_from_carts()
+        db.session.commit()
 
-    @staticmethod
-    def insert_roles():
-        roles = {
-            'Customer': (Permission.GENERAL, 'main', True),
-            'Administrator': (Permission.ADMINISTER, 'admin', False)
-        }
-
-        for r in roles:
-            role = Role.query.filter_by(name=r).first()
-            if role is None:
-                role = Role(name=r)
-                role.permissions = roles[r][0]
-                role.default = roles[r][1]
-                db.session.add(role)
-            db.session.commit()
+    def delete_product(self):
+        self.remove_from_carts()
+        db.session.delete(self)
+        db.session.commit()
 
 
 class Customer(UserMixin, db.Model):
@@ -86,24 +84,7 @@ class Customer(UserMixin, db.Model):
     confirmed = db.Column(db.Boolean, default=False)
     phone_number = db.Column(db.String(64), unique=True)
     news_letter = db.Column(db.Boolean, default=False)
-    orders = db.relationship('Association', back_populates='customer', lazy='dynamic')
-    carts = db.relationship('Cart', backref=backref('customer', uselist=False))
-    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
-
-    def __init__(self, **kwargs):
-        super(Customer, self).__init__(**kwargs)
-        if self.role is None:
-            if self.email == current_app.config['ADMIN_EMAIL']:
-                self.role = Role.query.filter_by(permissions=0xff).first()
-            if self.role is None:
-                self.role = Role.query.filter_by(default=True).first()
-
-    def can(self, permissions):
-        return self.role is not None and \
-               (self.role.permissions & permissions) == permissions
-
-    def is_admin(self):
-        return self.can(Permission.ADMINISTER)
+    cart_items = db.relationship('CartItem', backref='customers', lazy='dynamic')
 
     @property
     def password(self):

@@ -12,7 +12,8 @@ if os.path.exists('.env'):
 
 class Config:
     APP_NAME = os.environ.get('APP_NAME') or 'Pizzeria'
-    # LOG_TO_STDOUT = os.environ.get('LOG_TO_STDOUT')
+    ALLOWED_EXTENSIONS = {'jpeg', 'jpg', 'png', 'gif'}
+    UPLOAD_FOLDER = 'static/uploads'
 
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
